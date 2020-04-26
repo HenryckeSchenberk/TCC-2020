@@ -26,12 +26,16 @@ void loop() {
   mpu6050.update();                         // Atualiza o valor do sensor
   VN = mpu6050.getAngleZ();                 // Armazena o angulo do eixo "Z"
   if (VN >= VA + 45) {                      // Verifica se o valor atual é 45º maior que o anterior    
-    digitalWrite(R, HIGH);                  // É? Aciona a seta da dieita
+    if(R1 ==0){
+    //Serial.println("Direita Ligada");
+    Serial.write('1');
+   // digitalWrite(R, HIGH);                  // É? Aciona a seta da dieita
+    }
     R1 = 1;                                 // Avisa que a seta está ligada 
     t = 1;                                  // Pede que o timer inicie de 0.
     Reset();
   } else {
-    Serial.println(VN);                          // Angulo em que o giroscópio está.
+    //Serial.println(VN);                          // Angulo em que o giroscópio está.
     mpu6050.update();                            // Atualiza o valor.
   }
 
@@ -40,8 +44,9 @@ void loop() {
     T = 0;                                            // Não pode mair verificar se pode resetar o timer
     if (millis() - timer > 3000) {                    // Após 3 segundos com a seta ligada
       T = 1;                                          // Pode perguntar se o timer deve ser resetado
-      if (VN <= VA + 90 && VN >= VA + 45) {           // Caso o angulo lido enteja entre " 90 e 45 "
-        digitalWrite(R, LOW);                         // Apaga a seta
+      if (VN <= VA + 95 && VN >= VA + 45) {           // Caso o angulo lido enteja entre " 90 e 45 "
+    //    Serial.println("Direita Desligada");
+       // digitalWrite(R, LOW);                         // Apaga a seta
         R1 = 0;                                       // Avisa que a seta está desligada
         VA = VN;                                      // Valor antigo passa a ser o valor novo
       }
@@ -53,12 +58,16 @@ void loop() {
   }
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=   // Executa as mesmas funções para a seta da Esquerda
 if (VN <= VA - 45) {
-    digitalWrite(L, HIGH);
+  if(L1 == 0){
+   // Serial.println("Esquerda Ligada");
+    Serial.write('2');
+   // digitalWrite(L, HIGH);
+  }
     L1 = 1;
     t = 1;
     Reset();
   } else {
-    Serial.println(VN);
+   // Serial.println(VN);
     mpu6050.update();
   }
 
@@ -68,7 +77,8 @@ if (VN <= VA - 45) {
     if (millis() - timer > 3000) {
       T = 1;
       if (VN >= VA - 90 && VN <= VA - 45) {
-        digitalWrite(L, LOW);
+      //  Serial.println("Esquerda Desligada");
+       // digitalWrite(L, LOW);
         L1 = 0;
         VA = VN;
       }
